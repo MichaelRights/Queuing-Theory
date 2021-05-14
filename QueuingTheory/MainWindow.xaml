@@ -1,0 +1,100 @@
+﻿<Window x:Class="QueuingTheory.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dv="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"  
+        xmlns:dvc="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" 
+        xmlns:local="clr-namespace:QueuingTheory"
+        mc:Ignorable="d"
+        Title="MainWindow" ResizeMode="CanResize" Height="600" Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Label x:Name="inputRateLabel" Content="Մուտքային հոսքի հաճախությունը (1 ժամուոմ)։" HorizontalAlignment="Left" Margin="21,25,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="inputRate" HorizontalAlignment="Left" Height="20" Margin="309,29,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="120" />
+            <Label x:Name="avgTimeLabel" Content="Հաճախորդի սպասարկման ժամանակը (րոպե)։" HorizontalAlignment="Left" Margin="21,51,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="avgTime" HorizontalAlignment="Left" Height="20" Margin="309,54,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="120"/>
+            <Label x:Name="workersCountLabel" Content="Սպասարկողների քանակը։" HorizontalAlignment="Left" Margin="458,25,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="workersCount" HorizontalAlignment="Left" Height="20" Margin="677,25,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
+            <Label x:Name="maxLengthLabel" Content="Հերթի մաքսիմալ երկարությունը:" HorizontalAlignment="Left" Margin="458,50,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="maxLength" HorizontalAlignment="Left" Height="20" Margin="677,55,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="120"/>
+            <Label x:Name="timeLabel" Content="Ընդհանուր ժամանակը։" HorizontalAlignment="Left" Margin="21,76,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="time" HorizontalAlignment="Left" Height="20" Margin="309,82,0,0" TextWrapping="Wrap" Text="8" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="button" Foreground="AliceBlue" Background="DodgerBlue" Content="Հաշվել" HorizontalAlignment="Left" Margin="834,44,0,0" VerticalAlignment="Top" Height="40" Width="128" Click="Calculate" RenderTransformOrigin="0.65,0.367"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1" >
+                    <ListView Margin="10" Name="data">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Անվանում" Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Արժեք" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Value}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Չափման միավոր" Width="120">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Measurement}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+                <Grid Grid.Row="0">
+                    <dvc:Chart BorderThickness="0" Height="300" Width="Auto" Name="Chart0" >
+                        <dvc:Chart.Axes>
+                            <dvc:CategoryAxis Title="Ժամանակ" Orientation="X"/>
+                            <dvc:CategoryAxis Title="Արժեք" Orientation="Y"/>
+                        </dvc:Chart.Axes>
+                        <dvc:Chart.Series >
+                            <dvc:LineSeries
+                                            
+                                         Title="Սպասարկվում են"
+                                         x:Name="served"
+                                         IndependentValueBinding="{Binding Time}"
+                                         DependentValueBinding="{Binding Value}">
+                            </dvc:LineSeries>
+
+                            <dvc:LineSeries
+                                          
+                                         Title="Մերժված են"
+                                         x:Name="refused"
+                                         IndependentValueBinding="{Binding Time}"
+                                         DependentValueBinding="{Binding Value}">
+                            </dvc:LineSeries>
+
+                            <dvc:LineSeries
+                                         Title="Հերթի մեջ են"
+                                         x:Name="inQueue"
+                                         IndependentValueBinding="{Binding Time}"
+                                         DependentValueBinding="{Binding Value}">
+                            </dvc:LineSeries>
+                        </dvc:Chart.Series>
+                    </dvc:Chart>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
